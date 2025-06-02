@@ -8,7 +8,8 @@ const Login = () => {
     const [password, setPassword] = useState('chamseddinebz@gmail.com')
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
     const [generalError, setGeneralError] = useState('')
-    
+    const [loading, setLoading] = useState(false)
+
     const validationSchema = z.object({
         email: z.string().email("Invalid email"),
         password: z.string().min(6, "Password must be at least 6 characters"),
@@ -59,7 +60,9 @@ const Login = () => {
                 } else {
                     setGeneralError('An error occurred during login. Please try again.');
                 }
-            }
+            } finally {
+            setLoading(false);
+          }
     }
 
     return (
@@ -82,7 +85,8 @@ const Login = () => {
                 />
                 {errors?.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 {errors?.password && <Text style={styles.errorText}>{errors.password}</Text>}
-                <Button title='Login' onPress={handleLogin} />
+                <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLogin} disabled={loading} />
+
             </View>
         </SafeAreaView>
     )
